@@ -1,0 +1,84 @@
+<h2>Id:</h2> <%= @project.id %>
+<h2>Title:</h2> <%= @project.title %>
+<h2>Description:</h2> <%= @project.description %>
+<hr />
+<h2>Bug:</h2>
+<ul>
+  <% @project.bugs.each do |bug| %>
+    <li><%= bug.title %></li>
+    <li><%= bug.deadline %></li>
+    <li><%= bug.image %></li>
+    <li><%= bug.bug_type %></li>
+    <li><%= bug.status %></li>
+  <%= link_to 'Edit', edit_bug_path(bug) %>
+  <%= button_to "Delete Bug", @bug, method: :delete %>
+  <% end %>
+</ul>
+<hr />
+<h2>Developers:</h2>
+  <ul>
+    <% developer_names = [] %>
+    <% @project.users.each do |u| %>
+      <% if u.developer? && !developer_names.include?(u.name) %>
+        <li><%= u.name %></li>
+          <% developer_names << u.name %>
+      <% end %>
+    <% end %>
+  </ul>
+<hr />
+
+<% if policy(Bug).hide_tag? %>
+  <h2>Developers:</h2>
+  <ul>
+    <% developer_names = [] %>
+    <% @project.users.each do |u| %>
+      <% if u.developer? && !developer_names.include?(u.name) %>
+        <li><%= u.name %></li>
+          <% developer_names << u.name %>
+      <% end %>
+    <% end %>
+  </ul>
+<% end %>
+<hr />
+
+<div>
+  <%= link_to "Edit this post", edit_project_path(@project) %> |
+  <%= link_to "Back to posts", projects_path %>
+  <%= button_to "Destroy this post", @project, method: :delete %>
+</div>
+
+<% if policy(Bug).hide_tag? %>
+<hr />
+    <h3>Add Bug</h3>
+    <br/>
+      <%= form_with model: [@project,@project.bugs.build] do |f| %>
+      <div class="field">
+          <%= f.label :title %>
+          <%= f.text_field :title %>
+        </div>
+
+        <div class="field">
+          <%= f.label :deadline %>
+          <%= f.date_field :deadline %>
+        </div>
+
+        <div class="field">
+          <%= f.label :image %>
+          <%= f.file_field :image %>
+        </div>
+
+        <div class="field">
+          <%= f.label :bug_type %>
+          <%= f.select :bug_type, ['Feature', 'Bug'], {prompt: "Select a Type"}, class: 'type-select' %>
+        </div>
+
+        <div class="field" id="status-field">
+          <%= f.label :status %>
+          <%= f.select :status, [], {prompt: "Select a Status"}, class: 'status-select' %>
+        </div>
+
+        <div>
+          <%= f.submit %>
+        </div>
+      <% end %>  
+  <% end %>

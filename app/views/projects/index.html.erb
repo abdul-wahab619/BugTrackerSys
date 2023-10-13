@@ -1,0 +1,45 @@
+<h1>Projects</h1>
+<h2>Total Projects: <%= Project.count %></h2>
+<br />
+
+<% if current_user %>
+  <p><%= current_user.user_type %> | <%= current_user.name %> | <%= link_to "Logout", destroy_user_session_path, data: { turbo_method: :delete, turbo_confirm: 'Are you sure?' } %></p>
+<% else %>
+  <p><%= link_to "Login", new_user_session_path %> | <%= link_to "Sign Up", new_user_registration_path %></p>
+<% end %>
+
+<h3><%= link_to "New Project", new_project_path %></h3>
+<br />
+
+<p>
+  <label for="search" style="display: block">Search</label>
+  <input type="text" id="search" placeholder="Search project by title">
+</p>
+
+<div style="overflow-x:auto;">
+  <table style="width:100%; border-collapse:collapse; margin-bottom:20px; font-family:Arial, sans-serif;">
+    <thead>
+      <tr>
+        <th style="border:1px solid #000;">Id</th>
+        <th style="border:1px solid #000;">Title</th>
+        <th style="border:1px solid #000;">Description</th>
+        <th style="border:1px solid #000;">Actions</th>
+      </tr>
+    </thead>
+
+    <tbody id="s_body">
+      <% @projects.each do |project| %>
+        <tr>
+          <td style="padding:10px; border:1px solid #000;"><%= project.id %></td>
+          <td style="padding:10px; border:1px solid #000;"><%= project.title %></td>
+          <td style="padding:10px; border:1px solid #000;"><%= project.description %></td>
+          <td style="padding:10px; border:1px solid #000;">
+            <%= link_to "Show", project %>
+            <%= link_to "Edit", edit_project_path(project) %>
+            <%= link_to 'Destroy', project_path(project), data: { turbo_method: :delete, turbo_confirm: 'Are you sure?' } %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>

@@ -1,0 +1,38 @@
+<%= form_with(model: project, data: { 
+  controller: 'nested-form',
+  nested_form_wrapper_selector_value: '.nested-form-wrapper'
+}) do |form| %>
+  <% if project.errors.any? %>
+    <div style="color: red">
+      <ul>
+        <% project.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div>
+    <%= form.label :title, style: "display: block" %>
+    <%= form.text_field :title %>
+  </div>
+
+  <div>
+    <%= form.label :description, style: "display: block" %>
+    <%= form.text_area :description %>
+  </div>
+
+ <div>
+  <template data-nested-form-target="template">
+    <%= form.fields_for :bugs, ProjectUser.new, child_index: 'NEW_RECORD' do |user_fields| %>
+      <%= render "user_form", f: user_fields %>
+    <% end %>
+  </template>
+  
+  <div data-nested-form-target="target"></div>
+     <%= link_to 'Add Developer', '#', data: { action: 'nested-form#add' } %>
+  </div>
+  <div>
+    <%= form.submit %>
+  </div>
+<% end %>

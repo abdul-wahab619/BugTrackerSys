@@ -1,0 +1,30 @@
+<%= form_with model: bug do |f| %>
+      <div class="field">
+          <%= f.label :title %>
+          <%= f.text_field :title %>
+        </div>
+
+        <div class="field">
+          <%= f.label :deadline %>
+          <%= f.date_field :deadline %>
+        </div>
+
+        <div class="field">
+          <%= f.label :image %>
+          <%= f.file_field :image %>
+        </div>
+
+        <div class="field">
+          <%= f.label :bug_type %>
+          <%= f.select :bug_type, ['Feature', 'Bug'], {prompt: "Select a Type"}, class: 'type-select' %>
+        </div>
+
+        <div class="field" id="status-field">
+          <%= f.label :status %>
+          <%= f.select :status, [], {prompt: "Select a Status"}, class: 'status-select' %>
+        </div>
+
+        <div>
+          <%= f.submit %>
+        </div>
+      <% end %>  
